@@ -1,61 +1,61 @@
-const connection = require('../config/db'); // your MySQL connection
+const connection = require('../config/db');
 
-// Get all meetings
-exports.getAllMeetings = (req, res) => {
-    connection.query('SELECT * FROM meetings', (err, rows) => {
+// Get all agendas
+exports.getAllAgendas = (req, res) => {
+    connection.query('SELECT * FROM agendas', (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows);
     });
 };
 
-// Get meeting by ID
-exports.getMeetingById = (req, res) => {
+// Get agenda by ID
+exports.getAgendaById = (req, res) => {
     const id = req.params.id;
-    connection.query('SELECT * FROM meetings WHERE id=?', [id], (err, rows) => {
+    connection.query('SELECT * FROM agendas WHERE id=?', [id], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         if (rows.length > 0) res.json(rows);
-        else res.status(404).json({ message: 'Meeting not found' });
+        else res.status(404).json({ message: 'Agenda not found' });
     });
 };
 
-// Create a new meeting
-exports.createMeeting = (req, res) => {
-    const { meeting_title, host, department, meeting_type, scheduled_date } = req.body;
+// Create a new agenda
+exports.createAgenda = (req, res) => {
+    const { agenda_title, assigned_to, priority, status, due_date } = req.body;
     connection.query(
-        'INSERT INTO meetings (meeting_title, host, department, meeting_type, scheduled_date) VALUES (?,?,?,?,?)',
-        [meeting_title, host, department, meeting_type, scheduled_date],
+        'INSERT INTO agendas (agenda_title, assigned_to, priority, status, due_date) VALUES (?,?,?,?,?)',
+        [agenda_title, assigned_to, priority, status, due_date],
         (err, result) => {
             if (err) return res.status(500).json({ error: err.message });
-            res.json({ message: 'Meeting Created Successfully', meetingId: result.insertId });
+            res.json({ message: 'Agenda Created Successfully', agendaId: result.insertId });
         }
     );
 };
 
-// Update a meeting
-exports.updateMeeting = (req, res) => {
+// Update an agenda
+exports.updateAgenda = (req, res) => {
     const id = req.params.id;
-    const { meeting_title, host, department, meeting_type, scheduled_date } = req.body;
+    const { agenda_title, assigned_to, priority, status, due_date } = req.body;
     connection.query(
-        'UPDATE meetings SET meeting_title=?, host=?, department=?, meeting_type=?, scheduled_date=? WHERE id=?',
-        [meeting_title, host, department, meeting_type, scheduled_date, id],
+        'UPDATE agendas SET agenda_title=?, assigned_to=?, priority=?, status=?, due_date=? WHERE id=?',
+        [agenda_title, assigned_to, priority, status, due_date, id],
         (err, result) => {
             if (err) return res.status(500).json({ error: err.message });
-            if (result.affectedRows > 0) res.json({ message: 'Meeting Updated Successfully' });
-            else res.status(404).json({ message: 'Meeting Not Found' });
+            if (result.affectedRows > 0) res.json({ message: 'Agenda Updated Successfully' });
+            else res.status(404).json({ message: 'Agenda Not Found' });
         }
     );
 };
 
-// Delete a meeting
-exports.deleteMeeting = (req, res) => {
+// Delete an agenda
+exports.deleteAgenda = (req, res) => {
     const id = req.params.id;
     connection.query(
-        'DELETE FROM meetings WHERE id=?',
+        'DELETE FROM agendas WHERE id=?',
         [id],
         (err, result) => {
             if (err) return res.status(500).json({ error: err.message });
-            if (result.affectedRows > 0) res.json({ message: 'Meeting Deleted Successfully' });
-            else res.status(404).json({ message: 'Meeting Not Found' });
+            if (result.affectedRows > 0) res.json({ message: 'Agenda Deleted Successfully' });
+            else res.status(404).json({ message: 'Agenda Not Found' });
         }
     );
 };
