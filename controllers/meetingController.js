@@ -51,7 +51,7 @@ exports.updateMeeting = (req, res) => {
 
 // ─── DELETE MEETING ───
 exports.deleteMeeting = (req, res) => {
-    const id = req.params.id; // <-- now comes from URL
+    const id = req.params.id; // 
     connection.query(
         "DELETE FROM meetings WHERE id=?",
         [id],
