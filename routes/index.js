@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/agendaController');
 
-// Agendas CRUD
 router.get('/agendas', controller.getAllAgendas);
 router.get('/agendas/:id', controller.getAgendaById);
 router.post('/agendas', controller.createAgenda);
