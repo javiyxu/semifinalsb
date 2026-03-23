@@ -1,6 +1,6 @@
 const connection = require('../config/db');
 
-// Get all agendas
+// GET all agendas
 exports.getAllAgendas = (req, res) => {
     connection.query('SELECT * FROM agendas', (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -8,17 +8,17 @@ exports.getAllAgendas = (req, res) => {
     });
 };
 
-// Get agenda by ID
+// GET agenda by ID
 exports.getAgendaById = (req, res) => {
     const id = req.params.id;
     connection.query('SELECT * FROM agendas WHERE id=?', [id], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
-        if (rows.length > 0) res.json(rows);
+        if (rows.length > 0) res.json(rows[0]);
         else res.status(404).json({ message: 'Agenda not found' });
     });
 };
 
-// Create a new agenda
+// CREATE agenda
 exports.createAgenda = (req, res) => {
     const { agenda_title, assigned_to, priority, status, due_date } = req.body;
     connection.query(
@@ -31,7 +31,7 @@ exports.createAgenda = (req, res) => {
     );
 };
 
-// Update an agenda
+// UPDATE agenda
 exports.updateAgenda = (req, res) => {
     const id = req.params.id;
     const { agenda_title, assigned_to, priority, status, due_date } = req.body;
@@ -46,16 +46,12 @@ exports.updateAgenda = (req, res) => {
     );
 };
 
-// Delete an agenda
+// DELETE agenda
 exports.deleteAgenda = (req, res) => {
     const id = req.params.id;
-    connection.query(
-        'DELETE FROM agendas WHERE id=?',
-        [id],
-        (err, result) => {
-            if (err) return res.status(500).json({ error: err.message });
-            if (result.affectedRows > 0) res.json({ message: 'Agenda Deleted Successfully' });
-            else res.status(404).json({ message: 'Agenda Not Found' });
-        }
-    );
+    connection.query('DELETE FROM agendas WHERE id=?', [id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (result.affectedRows > 0) res.json({ message: 'Agenda Deleted Successfully' });
+        else res.status(404).json({ message: 'Agenda Not Found' });
+    });
 };
